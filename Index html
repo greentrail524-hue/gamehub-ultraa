@@ -128,7 +128,8 @@
     id:i+1,
     title:`Game #${i+1}`,
     category:categories[i%categories.length],
-    url:`games/game-${i+1}.html`
+    url: `games/game.html`,
+
   }));
 
   const grid = document.getElementById("grid");
