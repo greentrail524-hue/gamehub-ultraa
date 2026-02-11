@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameHub Ultra</title>
+  <meta name="theme-color" content="#111" />
+  <style>
+    :root { --bg:#0f0f0f; --card:#1a1a1a; --txt:#fff; --muted:#aaa; --accent:#4caf50; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--txt); }
+    header { padding:16px; display:flex; align-items:center; gap:12px; background:#111; position:sticky; top:0; z-index:10; }
+    h1 { font-size:18px; margin:0; }
+    input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #333; background:#0b0b0b; color:#fff; }
+    main { padding:16px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap:12px; }
+    .card { background:var(--card); border-radius:14px; padding:12px; cursor:pointer; border:1px solid #222; transition:.15s; }
+    .card:hover { transform:translateY(-2px); border-color:#333; }
+    .thumb { height:80px; border-radius:10px; background:#222; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px; }
+    .name { margin-top:8px; font-size:14px; }
+    footer { padding:16px; color:var(--muted); text-align:center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎮 GameHub Ultra</h1>
+    <input id="search" placeholder="Search games…" />
+  </header>
+
+  <main>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <footer>
+    <small>Offline-ready • Installable • No servers required</small>
+  </footer>
