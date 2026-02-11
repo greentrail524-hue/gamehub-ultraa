@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameHub Ultra</title>
+  <meta name="theme-color" content="#6c7cff" />
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --bg2:#0e1330;
+      --card: #141a2e;
+      --text: #e6e9ff;
+      --muted: #9aa3ff;
+      --accent: #6c7cff;
+      --ok:#4ade80;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+    }
+
+    [data-theme="light"]{
+      --bg:#f6f7ff;
+      --bg2:#eef0ff;
+      --card:#ffffff;
+      --text:#0b1025;
+      --muted:#5b63b7;
+      --accent:#5b6bff;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
+      background:linear-gradient(180deg,var(--bg),var(--bg2));
+      color:var(--text)
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(8px);
+      background:rgba(0,0,0,.4);
+      border-bottom:1px solid #1e244a
+    }
+
+    .wrap{max-width:1200px;margin:0 auto;padding:16px}
+    h1{margin:0}
+
+    .controls{
+      display:grid;
+      grid-template-columns:1fr auto auto auto auto;
+      gap:12px;
+      margin-top:12px
+    }
+
+    input,select,button{
+      background:#0f1530;
+      color:var(--text);
+      border:1px solid #222a66;
+      border-radius:10px;
+      padding:10px 12px
+    }
+
+    button.primary{
+      background:var(--accent);
+      border:none
+    }
+
+    main{padding:24px 16px}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+      gap:16px
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid #232b6e;
+      border-radius:16px;
+      overflow:hidden
+    }
+
+    .thumb{
+      aspect-ratio:16/9;
+      background:#000;
+      display:grid;
+      place-items:center
+    }
+
+    .info{padding:12px}
+    .title{font-weight:600}
+    .meta{font-size:12px;color:var(--muted)}
+    footer{border-top:1px solid #1e244a;color:var(--muted)}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <h1>GameHub Ultra</h1>
+    <div class="controls">
+      <input id="q" placeholder="Search games…" />
+      <select id="cat"><option value="">All</option></select>
+      <select id="sort">
+        <option value="az">A–Z</option>
+        <option value="za">Z–A</option>
+      </select>
+      <button class="primary" id="shuffle">Shuffle</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div class="wrap">© GameHub Ultra</div>
+</footer>
+
+<script>
+  const categories = ['Arcade','Puzzle','Action','Racing','Strategy'];
+
+  const games = Array.from({length:409},(_,i)=>({
+    id:i+1,
+    title:`Game #${i+1}`,
+    category:categories[i%categories.length],
+    url:`games/game-${i+1}.html`
+  }));
+
+  const grid = document.getElementById("grid");
+  const q = document.getElementById("q");
+  const cat = document.getElementById("cat");
+
+  [...new Set(games.map(g=>g.category))].forEach(c=>{
+    const o=document.createElement("option");
+    o.value=c;o.textContent=c;
+    cat.appendChild(o);
+  });
+
+  function render(){
+    let list = games.filter(g=>
+      (!q.value || g.title.toLowerCase().includes(q.value.toLowerCase())) &&
+      (!cat.value || g.category===cat.value)
+    );
+
+    grid.innerHTML="";
+    list.forEach(g=>{
+      const d=document.createElement("div");
+      d.className="card";
+      d.innerHTML=`
+        <div class="thumb">Preview</div>
+        <div class="info">
+          <div class="title">${g.title}</div>
+          <div class="meta">${g.category}</div>
+          <button class="primary" onclick="location.href='${g.url}'">Play</button>
+        </div>`;
+      grid.appendChild(d);
+    });
+  }
+
+  q.oninput = render;
+  cat.onchange = render;
+  render();
+
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
+</body>
+</html>
+
